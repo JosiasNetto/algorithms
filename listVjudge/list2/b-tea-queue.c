@@ -1,8 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct noodle Noodle;
-typedef struct queue Queue;
+typedef struct noodle{
+  int element;
+  struct noodle* next;
+}Noodle;
+
+typedef struct queue{
+  Noodle* front;
+  Noodle* rear;
+  int size;
+}Queue;
 
 Noodle* create_noodle(int, Noodle*);
 Noodle* create_first_noodle(Noodle*);
@@ -13,23 +21,41 @@ int dequeue(Queue*);
 
 int main(){
 
-  int testCases, i;
+  int testCases;
 
-  scanf("%d", testCases);
+  scanf("%d", &testCases);
 
-  for (i = 0; i < testCases; i++){
+  for (int i = 0; i < testCases; i++){
     int students;
-    scanf("%d", students);
-    
+    scanf("%d", &students);
+
+    Queue* queueTimeArrive = create_queue();
+    Queue* queueTimeMax = create_queue();
+
+    int timeArrive;
+    int timeMax;
+    int time = 1;
+
+    for(int j = 0; j < students; j++){ 
+      scanf("%d", &timeArrive);
+      enqueue(queueTimeArrive,timeArrive );
+      scanf("%d", &timeMax);
+      enqueue(queueTimeMax, timeMax);
+      if ((queueTimeMax->front->next->element - queueTimeArrive->front->next->element) >= (time - queueTimeArrive->front->next->element)){
+        printf("%d ", time);
+        time++;
+      }
+      else{
+        printf("0 ");
+      }
+      dequeue(queueTimeArrive);
+      dequeue(queueTimeMax);
+    }
+    printf("\n");
   }
 
   return 0;
 }
-
-struct noodle{
-  int element;
-  Noodle* next;
-};
 
  Noodle* create_noodle(int it, Noodle* nextval){
   Noodle* newNoodle = (Noodle*) malloc(sizeof(Noodle));
@@ -44,12 +70,6 @@ struct noodle{
 
   return newNoodle;
  }
-
-struct queue{
-  Noodle* front;
-  Noodle* rear;
-  int size;
-};
 
 Queue* create_queue(){
   Queue* newQueue = (Queue*) malloc(sizeof(Queue));
