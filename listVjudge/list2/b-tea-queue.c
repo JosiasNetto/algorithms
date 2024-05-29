@@ -42,6 +42,9 @@ int main(){
       scanf("%d", &timeMax);
       enqueue(queueTimeMax, timeMax);
       if ((queueTimeMax->front->next->element - queueTimeArrive->front->next->element) >= (time - queueTimeArrive->front->next->element)){
+        if(queueTimeArrive->front->next->element > time){
+          time = queueTimeArrive->front->next->element;
+        }
         printf("%d ", time);
         time++;
       }
