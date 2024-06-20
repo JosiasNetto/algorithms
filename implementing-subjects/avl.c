@@ -10,6 +10,7 @@ typedef struct bstnode
   Value element;
   struct bstnode* left;
   struct bstnode* right;
+  int height;
 }BstNode;
 
 BstNode* create_bstnode(Key k, Value ele){
@@ -18,6 +19,7 @@ BstNode* create_bstnode(Key k, Value ele){
   newNode->key = k;
   newNode->element = ele;
   newNode->left = newNode->right = NULL;
+  newNode->height = 0;
 
   return newNode;
 }
@@ -36,18 +38,14 @@ Bst* create_bst(){
   return newTree;
 }
 
-int find(Bst* bst, Key k){
-  return findhelp(bst->root, k);
-}
-
 int findhelp(BstNode* rt, Key k){
   if(rt == NULL){
-    return NULL;
+    return -1;
   }
   else if(rt->key > k){
     return findhelp(rt->left, k);
   } 
-  else if(rt->key = k){
+  else if(rt->key == k){
     return rt->element;
   }
   else{
@@ -55,9 +53,30 @@ int findhelp(BstNode* rt, Key k){
   }
 }
 
-void insert(Bst* bst, Key k, int element){
-  bst->root = inserthelp(bst->root, k, element);
-  bst->nodecount ++;
+int find(Bst* bst, Key k){
+  return findhelp(bst->root, k);
+}
+
+int max(int a, int b){
+  if(b > a){
+    return b;
+  }
+  else{
+    return ;
+  }
+}
+
+int h(BstNode* rt){
+  if(rt == NULL){
+    return -1;
+  } 
+}
+
+int get_balance(BstNode* rt){
+  if(rt == NULL){
+    return 0;
+  }
+  return h(rt->left) - h(rt->right);
 }
 
 BstNode* insert_help(BstNode* rt, Key k, int element){
@@ -70,16 +89,53 @@ BstNode* insert_help(BstNode* rt, Key k, int element){
   else{
     rt->right = insert_help(rt->right, k, element);
   }
+
+  rt->height = 1 + max(h(rt->left), h(rt->right));
+  int balance = get_balance(rt);
+
+  if(balance < -1 && k >= rt->right->key){
+    return left_rotate(rt);
+  }
+  if(balance > 1 && k < rt->left->key){
+    return right_rotate(rt);
+  }
+  if(balance > 1 && k >= rt->left->key){
+    rt->left = left_rotate(rt->left);
+    return right_rotate(rt);
+  }
+  if(balance < -1 && k > rt->right->key){
+    rt->right = right_rotate(rt->right);
+    return left_rotate(rt);
+  }
+  return rt;
+
+
+
+
+
+
+
   return rt;
 }
 
-int remove(Bst* bst, Key k){
-  int temp = findhelp(bst->root, k);
-  if(temp != NULL){
-    bst->root = remove_help(bst->root, k);
-    bst->nodecount--;
+void insert(Bst* bst, Key k, int element){
+  bst->root = insert_help(bst->root, k, element);
+  bst->nodecount ++;
+}
+
+BstNode* get_min(BstNode* rt){
+  if(rt->left == NULL){
+    return rt;
   }
-  return temp;
+  return get_min(rt->left);
+}
+
+BstNode* delete_min(BstNode* rt){
+  if(rt->left == NULL){
+    return rt->right;
+  }
+  rt->left = delete_min(rt->left);
+  return rt;
 }
 
 BstNode* remove_help(BstNode* rt, Key k){
@@ -109,17 +165,14 @@ BstNode* remove_help(BstNode* rt, Key k){
   return rt;
 }
 
-BstNode* get_min(BstNode* rt){
-  if(rt->left == NULL){
-    return rt;
+int remove_key(Bst* bst, Key k){
+  int temp = findhelp(bst->root, k);
+  if(temp != -1){
+    bst->root = remove_help(bst->root, k);
+    bst->nodecount--;
   }
-  return get_min(rt->left);
+  return temp;
 }
 
-BstNode* delete_min(BstNode* rt){
-  if(rt->left == NULL){
-    return rt->right;
-  }
-  rt->left = delete_min(rt->left);
-  return rt;
-}
+
+
