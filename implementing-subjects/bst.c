@@ -55,11 +55,6 @@ int findhelp(BstNode* rt, Key k){
   }
 }
 
-void insert(Bst* bst, Key k, int element){
-  bst->root = inserthelp(bst->root, k, element);
-  bst->nodecount ++;
-}
-
 BstNode* insert_help(BstNode* rt, Key k, int element){
   if(rt == NULL){
     return create_bstnode(k, element);
@@ -73,13 +68,10 @@ BstNode* insert_help(BstNode* rt, Key k, int element){
   return rt;
 }
 
-int remove(Bst* bst, Key k){
-  int temp = findhelp(bst->root, k);
-  if(temp != NULL){
-    bst->root = remove_help(bst->root, k);
-    bst->nodecount--;
-  }
-  return temp;
+
+void insert(Bst* bst, Key k, int element){
+  bst->root = inserthelp(bst->root, k, element);
+  bst->nodecount ++;
 }
 
 BstNode* remove_help(BstNode* rt, Key k){
@@ -108,6 +100,16 @@ BstNode* remove_help(BstNode* rt, Key k){
   }
   return rt;
 }
+
+int remove(Bst* bst, Key k){
+  int temp = findhelp(bst->root, k);
+  if(temp != NULL){
+    bst->root = remove_help(bst->root, k);
+    bst->nodecount--;
+  }
+  return temp;
+}
+
 
 BstNode* get_min(BstNode* rt){
   if(rt->left == NULL){
