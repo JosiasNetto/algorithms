@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
 #include <bits/stdc++.h>
 
 typedef struct graph{
@@ -71,6 +70,9 @@ void DFS(Graph* g, int v){
   }
 }
 
+void BFS(Graph* g, int start){
+}
+
 
 
 
@@ -84,4 +86,11 @@ void graph_travers_Dfs(Graph* g){
       DFS(g, i);
     }
   }
+}
+
+int main(){
+
+  printf("Oi");
+
+  return 0;
 }
