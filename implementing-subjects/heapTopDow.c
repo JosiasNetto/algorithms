@@ -36,8 +36,8 @@ void heapify_down(Heap* hp, int index){
   }
   if(largest != index){
     int temp = hp->array[largest];
-    hp->array[largest] = hp->array[hp->size];
-    hp->array[hp->size] = temp;
+    hp->array[largest] = hp->array[index];
+    hp->array[index] = temp;
 
     heapify_down(hp, largest);
   }
