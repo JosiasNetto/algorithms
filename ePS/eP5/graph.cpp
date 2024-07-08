@@ -74,23 +74,25 @@ int get_mark(Graph* g, int v){
     return g->mark[v];
 }
 
-void return_path(Graph* g, int start, int final){
-  int aux, count;
-  aux = final;
-  count = 1;
+//Func that return the path of one vertice to another in the graph
+void return_path(Graph* g, int start, int final){ 
+  int aux, count; //Declaring aux variables
+  aux = final;  //Declaring the start vertice as the final
+  count = 1;  //Variable that count the qtd of passed vertices until reach the wanted one
 
-  stack<int> auxPrint;
+  stack<int> auxPrint;  //Stack to aux the print of the path
 
-
+  /*This while iterates trought the precedents list, 
+  starting at the final vertice, and checking his precedents until reach the start vertice */
   while(aux != start){
-    auxPrint.push(aux);
-    aux = g->precedents[aux];
-    count++;
+    auxPrint.push(aux); //Add the current vertice to the stack
+    aux = g->precedents[aux]; //Decare aux as the precedent of the precedent
+    count++;  //Increase the couunt of vertices in the path
   }
   
-  auxPrint.push(aux);
+  auxPrint.push(aux); //Add the starter vertice to the stack
 
-  for(int i = 0; auxPrint.size() != 0; i++){
+  for(int i = 0; auxPrint.size() != 0; i++){  //Loop that prints the path using the aux stack
     if(auxPrint.size() == 1){
       printf("%d", auxPrint.top());
     }
@@ -149,31 +151,36 @@ void graph_traverse_BFS(graph* g, int v1, int v2){
 int main(){
 
 
-    int c;
+    int c;  //Recceive the number of cases 
     scanf("%d", &c);
 
-    for(int i = 0; i < c; i++){
+    for(int i = 0; i < c; i++){ //Loops that iterate troghrt the number of cases
 
-        printf("Caso %d\n", (i + 1));
+        printf("Caso %d\n", (i + 1)); //Print the current case
 
-        int v, a;
+        int v, a;   //Declaring the vars of vertice number and edges number
         scanf("%d %d", &v, &a);
         
         Graph* g = create_graph(v);
 
-        for(int j = 0; j < a; j++){
+        for(int j = 0; j < a; j++){ //Loop that receive the edges and set in the graph
             int v1, v2;
             scanf("%d %d", &v1, &v2);
             set_edge(g, v1, v2);
         }
 
-        int p;
+        int p;  //Number of paths to be tried
         scanf("%d", &p);
 
-        for(int k = 0; k < p; k++){
+        for(int k = 0; k < p; k++){ //Loop that traverse the graph and print the path, if it exists
             int s, t;
             scanf("%d %d", &s, &t);
-            graph_traverse_BFS(g, s, t);
+            if( s != t){
+              graph_traverse_BFS(g, s, t);
+            }
+            else{
+              printf("%d", s);
+            }
             printf("\n");
 
         }
