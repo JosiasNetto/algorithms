@@ -7,12 +7,18 @@ typedef struct graph{
     int* mark;
     int numEdges;
     int numVertices;
+    int* precedents;  //Declare the precedents array
 }Graph;
 
 Graph* create_graph(int n){
     Graph* newGraph = (Graph*) malloc(sizeof(Graph));
 
     newGraph->mark = (int*) calloc(0, sizeof(int) * n);
+    newGraph->precedents = (int*) malloc(sizeof(int) * n);  //Malloc the space for the precedents array
+    for(int i = 0; i < n; i++){
+      newGraph->precedents[i] = -1; //Declare all the itens of array as -1
+    }
+
     newGraph->numEdges = 0;
     newGraph->numVertices = n;
 
@@ -68,8 +74,33 @@ int get_mark(Graph* g, int v){
     return g->mark[v];
 }
 
+void return_path(Graph* g, int start, int final){
+  int aux, count;
+  aux = final;
+  count = 1;
+
+  stack<int> auxPrint;
 
 
+  while(aux != start){
+    auxPrint.push(aux);
+    aux = g->precedents[aux];
+    count++;
+  }
+  
+  auxPrint.push(aux);
+
+  for(int i = 0; auxPrint.size() != 0; i++){
+    if(auxPrint.size() == 1){
+      printf("%d", auxPrint.top());
+    }
+    else{
+      printf("%d ", auxPrint.top());
+    }
+    auxPrint.pop();
+  }
+  
+}
 
 void BFS(Graph* g, int start, int goal){
 
@@ -91,22 +122,27 @@ void BFS(Graph* g, int start, int goal){
                 if(w == goal){
                     finish = 1;
                 }
+                if(g->precedents[w] == -1){ //If the vertice have no precedents, declare as the actual vertice
+                  g->precedents[w] = v;
+                }
             }
-
-            w = next(g, v, w);
-            
+            w = next(g, v, w);  
         }
     }
+    if(finish == 1){
+      return_path(g, start, goal); //Calls the path func
+    }
+    else{
+      printf("-1");
+    }
 }
-
 
 void graph_traverse_BFS(graph* g, int v1, int v2){
     for(int i = 0; i < g->numVertices; i++){
         set_mark(g, i, 0);
+        g->precedents[i] = -1;
     }
-    
     BFS(g, v1, v2); 
-    
 }
 
 
@@ -138,6 +174,8 @@ int main(){
             int s, t;
             scanf("%d %d", &s, &t);
             graph_traverse_BFS(g, s, t);
+            printf("\n");
+
         }
     }
 
