@@ -2,14 +2,37 @@
 
 using namespace std;
 
-bool jump_knight(int row, vector<vector<int> > board){
-  if(row == board.size()){
-    return true;
+bool valid(int i, int j, vector<vector<int> > board){
+  if(i < 0 || j < 0 || i > 9 || j > 9 || board[i][j] == -1 || board[i][j] == 1){
+    return false;
   }
-  else{
-    for(int i = 0; i < 8; i++){
+  return true;
+}
 
-    }
+bool jump_knight(int i,int j, vector<vector<int> > board){
+  if(valid(i - 2, j - 1, board)){
+    
+  }
+  else if(valid(i - 2, j + 1, board)){
+
+  }
+  else if(valid(i - 1, j - 2, board)){
+
+  }
+  else if(valid(i - 1, j + 2, board)){
+
+  }
+  else if(valid(i + 1, j - 2, board)){
+
+  }
+  else if(valid(i + 1, j + 2, board)){
+
+  }
+  else if(valid(i + 2, j - 1, board)){
+
+  }
+  else if(valid(i + 2, j + 1, board)){
+
   }
 
 }
