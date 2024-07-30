@@ -11,6 +11,8 @@ bool valid(int i, int j, vector<vector<int> >& board){
 
 void jump_knight(int i,int j, int cnt, int& maior, vector<vector<int> >& board){
   board[i][j] = 1;
+  maior = max(maior, cnt);
+
   if(valid(i - 2, j - 1, board)){
     jump_knight(i - 2, j - 1, cnt + 1, maior, board);
   }
@@ -35,49 +37,37 @@ void jump_knight(int i,int j, int cnt, int& maior, vector<vector<int> >& board){
   if(valid(i + 2, j + 1, board)){
     jump_knight(i + 2, j + 1, cnt + 1, maior, board);
   }
-  if(cnt > maior){
-    maior = cnt;
-  }
   board[i][j] = 0;
 }
 
 int main(){
-  int rows, cnt, maior;
+  int rows, count, maior;
   cin >> rows;
-  cnt = 0;
+  count = 0;
 
 while(rows != 0){
   int total;
   total = 0;
   maior = 0;
+  count++;
 
-  vector<vector<int> > board(10, vector<int>(10, 0));
-  cnt++;
+  vector<vector<int> > board(10, vector<int>(10, -1));
 
-  int skiped, valid, cntValid;
-  cntValid = 0;
+  int cntValid = 0;
   for(int i = 0; i < rows; i++){
+    int skiped, valid;
     cin >> skiped >> valid;
     total += valid;
-    for(int j = 0; j < 10; j++){
-      if(j < skiped){
-        board[i][j] = -1;
-      }
-      else if(cntValid < valid){
-        board[i][j] = 0;
-        cntValid++;
-      }
-      else{
-        board[i][j] = -1;
-      }
+    for(int j = skiped; j < skiped + valid; j++){
+      board[i][j] = 0;
     }
   }
-  jump_knight(0, 0, 0, maior, board);
-  if(cntValid - maior != 1){
-    cout << "Case " << cnt <<" "<< maior << " squares can not be reached."<<endl;
+  jump_knight(0, 0, 1, maior, board);
+  if(total - maior != 1){
+    cout << "Case " << count <<", "<< total - maior << " squares can not be reached."<<endl;
   }
   else{
-    cout << "Case " << cnt <<" "<< total - maior << " square can not be reached."<<endl;
+    cout << "Case " << count <<", "<< total - maior << " square can not be reached."<<endl;
   }
   cin >> rows;
 }
